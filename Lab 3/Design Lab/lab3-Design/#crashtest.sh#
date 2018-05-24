@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./crashtest 4
+
+cd test
+
+echo "
