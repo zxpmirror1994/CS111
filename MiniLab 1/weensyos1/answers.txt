@@ -1,0 +1,16 @@
+Name: Xiaopei Zhang
+UCLA ID: 004309991
+
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1:
+The sys_getpid() call will have returned the correct value since before the schedule(), the process id, pid, has already been copied and stored in the register %eax. Actually, the sys_getpid() call solely reads from the register and schedule() never changes what has been stored in %eax, so the returned value will be correct.
+
+
+
+Anything else you'd like us to know:
+
+
+
+Extra credit exercises:

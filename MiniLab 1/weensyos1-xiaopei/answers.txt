@@ -1,0 +1,45 @@
+Name: Xiaopei Zhang
+UCLA ID: 004309991
+
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1:
+The sys_getpid() call will return the correct value since the current process ID, p_pid, has already been copied and stored in the register %eax as well as its process descriptor before the call of schedule(). When certain different processes take control, the value stored inside %eax will be overwritten but the value stored in process descriptors won't since process descriptors are merely available for the kernel. Hence, we are able to retrieve the original process's information from its descriptor while it is being called again.
+
+
+Anything else you'd like us to know:
+Exercise 3:
+I add a new variable named "waiting_pid[NPROCS]" in the process descriptor, which records whether other processes are waiting for this process or not. In case INT_SYS_WAIT, I set waiting_pid[] based on the process's child process and make the calling process fall asleep by setting its state to P_BLOCKED. Then, in case INT_SYS_EXIT, I change the state of processes that waits on the current process, which is about to exit, to P_RUNNABLE. Besides, I update current process's %eax to its exit status.
+
+Exercise 4:
+In case INT_SYS_EXIT, I change the state of a process to P_EMPTY as soon as I detect it to be a zombie. Hence, dead processes are cleaned up.
+
+
+Extra credit exercises:
+Exercise 5:
+void start()
+{
+  int x = 0;
+  int *volatile vol_ptr = &x;  //volatile pointer to non-volatile variable
+  volatile int *vol_var = &x;  //pointer to volatile variable   
+
+  pid_t p = sys_fork();
+  if (p == 0)
+  {
+    *vol_ptr = 1;
+    *vol_var = 1;
+  }
+  else if (p > 0)
+  {
+    sys_wait(p);
+  }
+  app_print("%d", x);
+  sys_exit(0);
+}
+
+Exercise 6:
+Revisions in mpos.h, mpos-app.h, mpos-kern.c
+In mpos.h: Define INT_SYS_NEWTHREAD as a system call
+In mpos-app.h: Define the C version of sys_newthread by assembly codes
+In mpos-kern.c: In interrupt(), add a new branch in switch called INT_SYS_NEWTHREAD. Call the start_function, start_thread(), to generate a new process sharing the same space. Also, implement start_thread() by doing similar things in do_fork() except that we do not copy the parent stack for the child's but use the function's address as new process's eip
