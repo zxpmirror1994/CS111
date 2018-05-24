@@ -1,0 +1,74 @@
+Name: Xiaopei Zhang
+UCLA ID: 004309991
+
+Collaborators: None
+
+-------------------------------------------------------------------------------
+
+Response to Exercise 1: 
+
+The name of the scheduling algorithm is: Round Robin Scheduling Algorithm
+
+
+(Exercise 2 is a coding exercise)
+In schedos-1.c, I add sys_exit(0).
+in schedos-kern.c, I add the algorithm for exercise 2
+
+Response to Exercise 3:
+
+Average turnaround time for scheduling_algorithm 0: [(320*4-3)+(320*4-2)+(320*4-1)+320*4]/4=1278.5milliseconds
+Average turnaround time for scheduling_algorithm 1: (320+320*2+320*3+320*4)/4=800milliseconds
+
+Average wait time for scheduling_algorithm 0: (0+1+2+3)/4=1.5milliseconds
+Average wait time for scheduling_algorithm 1: (0+320+320*2+320+3)/4=480 milliseconds
+
+
+Exercise 4:
+
+I complete both for extra credit
+4A:
+(1) I add a system call, sys_priority() in schedos-app.h
+(2) I add a member called p_priority into the process descriptor in schedos-kern.h
+(3) I modify the case of INT_SYS_USER1 in interrupt() in schedos-kern.c
+(4) I make p_priority of all processes be 1 in start() in schedos-kern.c
+(5) I add a new branch in schedule() containing the algorithm in this situation (scheduling_algorithm == 41)
+
+4B:
+(1) I add a system call, sys_share() in schedos-app.h
+(2) I add two members, p_share and p_num, to the process descriptor in schedos-kern.h
+(3) I modify the case of INT_SYS_USER2 in interrupt() in schedos-kern.c
+(4) I make p_share of all processes be 1 and p_num of all processes be 0 in start() in schedos-kern.c
+(5) I add a new branch in schedule() containing the algorithm in this situation (scheduling_algorithm == 42)
+
+
+Exercise 5: 
+During the execution of process 4, the first known timer interrupt occurs. That's because in the picture, the first missing number printed out among 1,2,3 and 4 is 4. 
+
+
+(Exercise 6 is a coding exercise)
+Exercise 6:
+(1) I add "lock" as a global variable in schedos-symbols.ld
+(2) I define an extern variable that is also named "lock" in schedos.h
+(3) I make "lock" be 0 in start() in schedos-kern.c
+(4) By using the atomic function atomic_swap() offered in x86sync.h, I implement a lock that is only released after printing the character in schedos-1.c
+(5) To change HZ in schedos-kern.h between 100 and 1000, we can see the different results
+
+Anything else you'd like us to know: 
+To test each scheduling algorithm, someone should change the initial value of algorithm in start() to 0, 2, 41, 42 or 7
+
+
+
+Extra credit exercises:
+Exercise 7:
+I implement a reversal scheduling algorithm that schedules processes in one direction and then in itd reversing direction. That is, what shoule be prionted on the screen is: 1234321234321234321................14141414141414141414.........
+(1) I add "dir" in schedos-symbols.ld to indicate which direction I schedule the processes
+(2) I add an extern variable that is also named as "dir" in schedos.h
+(3) I define RIGHT (from process 1 to process 4) to be 1 and LEFT (from process 4 to process 1) to be 0 in schedos-kern.c.
+(4) I initialize the value of dir to RIGHT in start()
+(5) I add a new branch in schedule() containing the reversal scheduling algorithm
+
+Exercise 8:
+(1) I implement a new system call, sys_print() in schedos-app.h
+(2) I define INT_SYS_PRINT as a new entry with a value of 52 in schedos.h
+(3) I add a new case called INT_SYS_PRINT in interrupt() in schedos-kern.c
+(4) By using the structure recommended, I add a new condition where I use the system call instead of the original printing method in schedos-1.c  
